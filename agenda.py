@@ -280,7 +280,7 @@ class Agenda:
         copy.normalize()
         return copy
         
-    def complement(self, freeblock):
+    def complement(self, freeAgenda):
         """Produce the complement of an agenda
         within the span of a timeblock represented by 
         an appointment.  For example, 
@@ -300,24 +300,25 @@ class Agenda:
         """
         copy = self.normalized()
         comp = Agenda()
-        day = freeblock.begin.date()
-        desc = freeblock.desc
-        cur_time = freeblock.begin
-        for appt in copy.appts:
-            if appt < freeblock:
-                continue
-            if appt > freeblock:
-                if cur_time < freeblock.end:
-                    comp.append(Appt(day,cur_time.time(),freeblock.end.time(), desc))
-                    cur_time = freeblock.end
-                break
-            if cur_time < appt.begin:
-                # print("Creating free time from", cur_time, "to", appt.begin)
-                comp.append(Appt(day, cur_time.time(), appt.begin.time(), desc))
-            cur_time = max(appt.end,cur_time)
-        if cur_time < freeblock.end:
-            # print("Creating final free time from", cur_time, "to", freeblock.end)
-            comp.append(Appt(day, cur_time.time(), freeblock.end.time(), desc))
+        for freeblock in freeAgenda:
+            day = freeblock.begin.date()
+            desc = freeblock.desc
+            cur_time = freeblock.begin
+            for appt in copy.appts:
+                if appt < freeblock:
+                    continue
+                if appt > freeblock:
+                    if cur_time < freeblock.end:
+                        comp.append(Appt(day,cur_time.time(),freeblock.end.time(), desc))
+                        cur_time = freeblock.end
+                    break
+                if cur_time < appt.begin:
+                    # print("Creating free time from", cur_time, "to", appt.begin)
+                    comp.append(Appt(day, cur_time.time(), appt.begin.time(), desc))
+                cur_time = max(appt.end,cur_time)
+            if cur_time < freeblock.end:
+                # print("Creating final free time from", cur_time, "to", freeblock.end)
+                comp.append(Appt(day, cur_time.time(), freeblock.end.time(), desc))
         return comp
 
 
@@ -571,9 +572,9 @@ def selftest2_agenda():
            "\n" + "2013.12.01 14:00 15:00 | most of day")
 
 if __name__ == "__main__":
-    selftest_appt()
-    selftest_agenda()
-    selftest2_agenda()
+    # selftest_appt()
+    # selftest_agenda()
+    # selftest2_agenda()
         
 
     

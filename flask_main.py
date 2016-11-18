@@ -31,6 +31,9 @@ import secrets.client_secrets # Per-application secrets
 #     We use our own admin_secrets file along with your client_secrets
 #     file on our Raspberry Pis. 
 
+import agenda # Has all of our class methods for dealing
+# with the overlap of appointments and freetimes.
+
 app = flask.Flask(__name__)
 app.debug=CONFIG.DEBUG
 app.logger.setLevel(logging.DEBUG)
@@ -241,6 +244,8 @@ def chooseCal():
   sCal = request.form.getlist('vals')
   app.logger.debug("sCal: {}".format(sCal))
   events = []
+  free_times = agenda.Agenda()
+  freeblocks = agenda.Agenda()
 
   for cal in sCal:
     events.extend(list_events(gcal_service, begin_date.isoformat(), end_date.isoformat(), cal))
@@ -252,7 +257,19 @@ def chooseCal():
     if (arrow.get(e['end_time']).timetz() < begin_time or arrow.get(e['start_time']).timetz() > end_time):
       events.remove(e)
     else:
-      flask.flash("Name: {}   Start time: {}  Endtime: {}".format(e["summary"], e["start_time"], e["end_time"]))
+      appt = agenda.Appt(e["start_time"].datetime.date(), e["start_time"].datetime.timetz(), e["end_time"].datetime.timetz(), e["summary"])
+      free_times.append(appt)
+
+  day_gap = end_date.datetime.date() - begin_date.datetime.date()
+  free_date = begin_date
+  for i in range(day_gap + 1):
+    free_date = begin_date.replace(days=+i)
+    free_appt = agenda.Appt(free_date, e["start_time"].datetime.timetz(), e["end_time"].datetime.timetz(), "free time")
+    freeblocks.append(free_appt)
+
+  free_times.normalize().compliment(freeblocks)
+  for appointment in free_times:
+    flask.flash(str(appointment))
   return flask.redirect(url_for('choose'))
 
 
