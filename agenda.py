@@ -572,13 +572,6 @@ def selftest2_agenda():
            "\n" + "2013.12.01 14:00 15:00 | most of day")
 
 if __name__ == "__main__":
-    # selftest_appt()
-    # selftest_agenda()
-    # selftest2_agenda()
-        
-
-    
-    
-    
-    
-    
+    selftest_appt()
+    selftest_agenda()
+    selftest2_agenda()
