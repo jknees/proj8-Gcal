@@ -264,10 +264,12 @@ def chooseCal():
     free_appt = agenda.Appt(free_date.datetime.date(), begin_time, end_time, "free time")
     freeblocks.append(free_appt)
 
-  #free_times.normalize()
   comp_free = free_times.complement(freeblocks)
-  comp_free = sorted(comp_free)
-  for appointment in comp_free:
+  for appoint in free_times:
+    comp_free.append(appoint)
+
+  norm = comp_free.normalize()
+  for appointment in norm:
     flask.flash(str(appointment))
   return flask.redirect(url_for('choose'))
 
