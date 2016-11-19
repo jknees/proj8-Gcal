@@ -265,9 +265,17 @@ def chooseCal():
     freeblocks.append(free_appt)
 
   comp_free = free_times.complement(freeblocks)
+  flash_list = []
+  for appt in comp_free:
+    flash_list.append(str(appt))
+
+  for appt in free_times:
+    flash_list.append(str(appt))
+
+  flash_list.sort()
   
-  for appointment in comp_free:
-    flask.flash(str(appointment))
+  for appointment in flash_list:
+    flask.flash(appointment)
   return flask.redirect(url_for('choose'))
 
 
