@@ -254,7 +254,6 @@ def chooseCal():
   for e in events:
     if not (arrow.get(e['end_time']).timetz() < begin_time or arrow.get(e['start_time']).timetz() > end_time):
       appt = agenda.Appt(arrow.get(e["start_time"]).datetime.date(), arrow.get(e["start_time"]).datetime.timetz(), arrow.get(e["end_time"]).datetime.timetz(), e["summary"])
-      flask.flash(str(appt))
       free_times.append(appt)
 
   day_gap = end_date.datetime.date() - begin_date.datetime.date()
