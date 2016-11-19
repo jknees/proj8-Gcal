@@ -252,9 +252,7 @@ def chooseCal():
   
   app.logger.debug("Events: {}".format(events))
   for e in events:
-    if (arrow.get(e['end_time']).timetz() < begin_time or arrow.get(e['start_time']).timetz() > end_time):
-      events.remove(e)
-    else:
+    if not (arrow.get(e['end_time']).timetz() < begin_time or arrow.get(e['start_time']).timetz() > end_time):
       appt = agenda.Appt(arrow.get(e["start_time"]).datetime.date(), arrow.get(e["start_time"]).datetime.timetz(), arrow.get(e["end_time"]).datetime.timetz(), e["summary"])
       flask.flash(str(appt))
       free_times.append(appt)
