@@ -265,7 +265,7 @@ def chooseCal():
     free_appt = agenda.Appt(free_date.datetime.date(), arrow.get(e["start_time"]).datetime.timetz(), arrow.get(e["end_time"]).datetime.timetz(), "free time")
     freeblocks.append(free_appt)
 
-  free_times.normalize()
+  #free_times.normalize()
   comp_free = free_times.complement(freeblocks)
   for appointment in comp_free:
     flask.flash(str(appointment))
