@@ -260,7 +260,7 @@ def chooseCal():
 
   day_gap = end_date.datetime.date() - begin_date.datetime.date()
   free_date = begin_date
-  for i in range(day_gap + 1):
+  for i in range(day_gap.days +1):
     free_date = begin_date.replace(days=+i)
     free_appt = agenda.Appt(free_date.datetime.date(), arrow.get(e["start_time"]).datetime.timetz(), arrow.get(e["end_time"]).datetime.timetz(), "free time")
     freeblocks.append(free_appt)
