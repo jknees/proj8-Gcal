@@ -268,7 +268,7 @@ def chooseCal():
   for appoint in free_times:
     comp_free.append(appoint)
 
-  norm = comp_free.normalize()
+  norm = comp_free.normalized()
   for appointment in norm:
     flask.flash(str(appointment))
   return flask.redirect(url_for('choose'))
