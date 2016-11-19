@@ -252,7 +252,7 @@ def chooseCal():
   
   app.logger.debug("Events: {}".format(events))
   for e in events:
-    if (arrow.get(e['end_time']).timetz() < begin_time or arrow.get(e['start_time']).timetz() > end_time):
+    if (arrow.get(e['end_time']).time() < begin_time or arrow.get(e['start_time']).time() > end_time):
       events.remove(e)
     else:
       appt = agenda.Appt(arrow.get(e["start_time"]).datetime.date(), arrow.get(e["start_time"]).datetime.timetz(), arrow.get(e["end_time"]).datetime.timetz(), e["summary"])
