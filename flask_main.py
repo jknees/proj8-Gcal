@@ -250,21 +250,19 @@ def chooseCal():
   for cal in sCal:
     events.extend(list_events(gcal_service, begin_date.isoformat(), end_date.isoformat(), cal))
   
-  # FIXME: Turn the flashes into class objects so we can manipulate the values
-  # We can make the class have a format string to help with output.
   app.logger.debug("Events: {}".format(events))
   for e in events:
     if (arrow.get(e['end_time']).timetz() < begin_time or arrow.get(e['start_time']).timetz() > end_time):
       events.remove(e)
     else:
-      appt = agenda.Appt(e["start_time"].datetime.date(), e["start_time"].datetime.timetz(), e["end_time"].datetime.timetz(), e["summary"])
+      appt = agenda.Appt(arrow.get(e["start_time"]).datetime.date(), arrow.get(e["start_time"]).datetime.timetz(), arrow.get(e["end_time"]).datetime.timetz(), e["summary"])
       free_times.append(appt)
 
   day_gap = end_date.datetime.date() - begin_date.datetime.date()
   free_date = begin_date
   for i in range(day_gap + 1):
     free_date = begin_date.replace(days=+i)
-    free_appt = agenda.Appt(free_date, e["start_time"].datetime.timetz(), e["end_time"].datetime.timetz(), "free time")
+    free_appt = agenda.Appt(free_date.datetime.date(), arrow.get(e["start_time"]).datetime.timetz(), arrow.get(e["end_time"]).datetime.timetz(), "free time")
     freeblocks.append(free_appt)
 
   free_times.normalize().compliment(freeblocks)
